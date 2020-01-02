@@ -1,2 +1,5 @@
 .vscode
 data/
+*debug_bin
+
+prometheus-config/prometheus.yml

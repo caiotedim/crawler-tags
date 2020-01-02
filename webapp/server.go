@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type (
@@ -13,6 +17,38 @@ type (
 		Msg    string `json:"message"`
 		Status int    `json:"http_code"`
 	}
+)
+
+var (
+	topfollowersLatency = promauto.NewSummary(prometheus.SummaryOpts{
+		Name: "topfollowers_latency_seconds",
+		Help: "Top Followers API Latency duration",
+	})
+
+	topfollowersErrorsCounter = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "topfollowers_errors_counter",
+		Help: "Top Followers API Errors Counter",
+	})
+
+	postsSummarizedLatency = promauto.NewSummary(prometheus.SummaryOpts{
+		Name: "postssummarized_latency_seconds",
+		Help: "Posts Summarized per hour API Latency duration",
+	})
+
+	postsSummarizedCounter = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "postssummarized_errors_counter",
+		Help: "Posts Summarized per hour API Errors Counter",
+	})
+
+	totalPostsLatency = promauto.NewSummary(prometheus.SummaryOpts{
+		Name: "totalposts_latency_seconds",
+		Help: "Total posts per language API Latency duration",
+	})
+
+	totalPostsCounter = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "totalPosts_errors_counter",
+		Help: "Total posts per language API Errors Counter",
+	})
 )
 
 func setHeaders(w http.ResponseWriter) http.ResponseWriter {
@@ -31,6 +67,7 @@ func setHeaders(w http.ResponseWriter) http.ResponseWriter {
 func Server(bind *string, port *int, version string) {
 	os.Setenv("CRAWLER_TAGS_VERSION", version)
 
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/api/topfollowers", topFollowers)
 	http.HandleFunc("/api/postsummarized", postsSummarized)
 	http.HandleFunc("/api/totalpostslang", totalPostsLang)

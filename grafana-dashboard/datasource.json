@@ -1,0 +1,13 @@
+{
+  "name": "Prometheus",
+  "type": "prometheus",
+  "access": "proxy",
+  "url": "http://192.168.1.10:9090",
+  "password": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {},
+  "readOnly": false
+}

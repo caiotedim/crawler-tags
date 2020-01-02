@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/caiotedim/crawler-tags/config"
 	"github.com/caiotedim/crawler-tags/etcd"
@@ -48,10 +49,16 @@ func totalPostsLang(w http.ResponseWriter, r *http.Request) {
 
 func getPostsLang() ([]byte, error) {
 	c := config.NewConfig()
-	tweets := twitter.LookupHashtags(c)
+	t1 := time.Now()
+	tweets, err := twitter.LookupHashtags(c)
+	if err != nil {
+		totalPostsCounter.Inc()
+		return []byte(err.Error()), err
+	}
 	data := twitter.CountLang(tweets)
 	json, err := json.Marshal(data)
 	if err != nil {
+		totalPostsCounter.Inc()
 		msg := fmt.Sprintf("Error to marshal json: %v", err)
 		glog.Errorf(msg)
 		return []byte(msg), err
@@ -60,8 +67,11 @@ func getPostsLang() ([]byte, error) {
 	err = nil
 	err = etcd.EtcdPut(c, "postslang", json)
 	if err != nil {
+		totalPostsCounter.Inc()
 		glog.Errorf("Error to save on ETCD: %v", err)
 	}
+	t2 := time.Now()
+	totalPostsLatency.Observe(t2.Sub(t1).Seconds())
 
 	return json, nil
 }

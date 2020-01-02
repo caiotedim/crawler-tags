@@ -109,7 +109,7 @@ func (client Client) SearchTweetByHashTag(hashtag string) (Tweets, error) {
 }
 
 // LookupHashtags ...
-func LookupHashtags(c *config.Config) []Hashtags {
+func LookupHashtags(c *config.Config) ([]Hashtags, error) {
 	//c := config.NewConfig()
 	client := NewTwitterClient(c)
 
@@ -121,12 +121,13 @@ func LookupHashtags(c *config.Config) []Hashtags {
 		tweetHashtag.Tweets, err = client.SearchTweetByHashTag(value)
 		if err != nil {
 			glog.Errorf("Error on search tweet using hashtag: %s -> %v", value, err)
+			return tweetsHashtags, err
 		}
 		tweetsHashtags = append(tweetsHashtags, tweetHashtag)
 	}
 	//var summarized []Hashtags
 	//summarizeData(tweetsHashtags, summarized)
-	return tweetsHashtags
+	return tweetsHashtags, nil
 }
 
 /*func summarizeData(tweetsHashtags, summarized []Hashtags) []Hashtags {
