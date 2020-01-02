@@ -35,4 +35,4 @@ require (
 	sigs.k8s.io/yaml v1.1.0 // indirect
 )
 
-replace github.com/coreos/go-systemd => /Users/cfrancisco/Documents/gitlab/golang/src/github.com/coreos/go-systemd
+replace github.com/coreos/go-systemd => github.com/coreos/go-systemd/v22 v22.0.0
