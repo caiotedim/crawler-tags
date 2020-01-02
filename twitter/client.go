@@ -224,6 +224,7 @@ func usage() {
 
 func init() {
 	flag.Usage = usage
-	flag.Set("logtostderr", "true")
+	flag.Set("logtostderr", "false")
+	flag.Set("log_dir", "/tmp/crawler-tags")
 	flag.Parse()
 }

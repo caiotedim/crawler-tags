@@ -3,7 +3,9 @@ package etcd
 import (
 	"context"
 	"encoding/base64"
+	"flag"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -91,4 +93,16 @@ func EtcdGet(c *config.Config, key, id string) ([]byte, error) {
 		glog.Error(fmt.Sprintf("Id:[%s] %v", id, err))
 	}
 	return obj, err
+}
+
+func usage() {
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
+func init() {
+	flag.Usage = usage
+	flag.Set("logtostderr", "false")
+	flag.Set("log_dir", "/tmp/crawler-tags")
+	flag.Parse()
 }

@@ -13,7 +13,7 @@ var (
 	bind *string
 )
 
-const version = "1.0.0-alpha"
+const version = "1.0.1-alpha"
 
 func main() {
 	glog.Infof("Starting CRAWLER_TAGS on version %s: bind:[%s] port:[%d]", version, *bind, *port)
@@ -29,6 +29,7 @@ func init() {
 	bind = flag.String("bind", "0.0.0.0", "bind address")
 	port = flag.Int("port", 8080, "port")
 	flag.Usage = usage
-	flag.Set("logtostderr", "true")
+	flag.Set("logtostderr", "false")
+	flag.Set("log_dir", "/tmp/crawler-tags")
 	flag.Parse()
 }

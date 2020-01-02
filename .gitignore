@@ -3,6 +3,7 @@ data/
 *debug_bin
 
 prometheus-config/prometheus.yml
+logstash/logstash.conf
 
 # Binaries for programs and plugins
 *.exe
