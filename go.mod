@@ -1,9 +1,12 @@
-module crawler-tags
+module github.com/caiotedim/crawler-tags
+
+go 1.12
 
 require (
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
+	github.com/coreos/go-systemd v0.0.0-00010101000000-000000000000 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/dghubble/go-twitter v0.0.0-20190719072343-39e5462e111f
 	github.com/dghubble/oauth1 v0.6.0
@@ -32,4 +35,4 @@ require (
 	sigs.k8s.io/yaml v1.1.0 // indirect
 )
 
-go 1.13
+replace github.com/coreos/go-systemd => /Users/cfrancisco/Documents/gitlab/golang/src/github.com/coreos/go-systemd
