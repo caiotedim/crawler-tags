@@ -13,7 +13,7 @@ var (
 	bind *string
 )
 
-const version = "1.0.1-alpha"
+const version = "1.0.0"
 
 func main() {
 	glog.Infof("Starting CRAWLER_TAGS on version %s: bind:[%s] port:[%d]", version, *bind, *port)
