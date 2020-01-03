@@ -5,10 +5,13 @@ ACCESS_TOKEN_KEY="89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy"
 ACCESS_TOKEN_SECRET="htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j"
 DB_PORT="2379"
 
+start: app-run etcd-up prometheus-up grafana-up es-up logstash-up kibana-up
+stop: app-stop etcd-down prometheus-down grafana-down es-down logstash-down kibana-down clean-up
+
 grafana-up:
 	@echo Starting grafana...
 	docker run --rm -d -p 3000:3000 --name=grafana -e "GF_SERVER_ROOT_URL=http://$(IPADDRESS):3000"  -e "GF_SECURITY_ADMIN_PASSWORD=secret" grafana/grafana
-	sleep 2
+	sleep 5
 	curl -v -s -k "http://admin:secret@$(IPADDRESS):3000/api/datasources" -X POST -H "Content-Type: application/json"  -d@grafana-dashboard/datasource.json > /dev/null 2>&1
 	curl -v -s -k "http://admin:secret@$(IPADDRESS):3000/api/dashboards/db" -X POST -H "Content-Type: application/json"  -d@grafana-dashboard/dashboard.json > /dev/null 2>&1
 	@echo "Grafana is up and running"
@@ -30,16 +33,19 @@ build:
 	@$(eval VERSION=`cat main.go |grep "version ="| cut -d"=" -f2 |sed -e 's/"//g' -e 's/ //g'`)
 	docker build -t crawler-tags:$(VERSION) .
 
-run:
+app-run:
 	@echo "Starting crawler-tags"
-	docker run -d --name crawler-tags --rm -p 8080:8080 -e CONSUMER_API_KEY=$(CONSUMER_API_KEY) -e CONSUMER_API_SECRET=$(CONSUMER_API_SECRET) -e ACCESS_TOKEN_KEY=$(ACCESS_TOKEN_KEY) -e ACCESS_TOKEN_SECRET=$(ACCESS_TOKEN_SECRET) -e DB_HOST=$(IPADDRESS) -e DB_PORT="2379" crawler-tags:1.0.0-alpha
+	@$(eval VERSION=`cat main.go |grep "version ="| cut -d"=" -f2 |sed -e 's/"//g' -e 's/ //g'`)
+	mkdir -p /tmp/crawler-tags
+	docker run -d --name crawler-tags --rm -p 8080:8080 -v /tmp/crawler-tags:/tmp/crawler-tags -e CONSUMER_API_KEY=$(CONSUMER_API_KEY) -e CONSUMER_API_SECRET=$(CONSUMER_API_SECRET) -e ACCESS_TOKEN_KEY=$(ACCESS_TOKEN_KEY) -e ACCESS_TOKEN_SECRET=$(ACCESS_TOKEN_SECRET) -e DB_HOST=$(IPADDRESS) -e DB_PORT="2379" crawler-tags:$(VERSION)
 
-stop:
+app-stop:
 	@echo "Stopping crawler-tags"
 	docker stop crawler-tags
 
 etcd-up:
 	@echo "Starting etcd3"
+	mkdir -p $(PWD)/data/etcd
 	docker run -d -p 2379:2379 -p 2380:2380 --name etcd3 --rm -v $(PWD)/data/etcd:/var/lib/etcd/data quay.io/coreos/etcd:v3.3.10 etcd --listen-client-urls http://0.0.0.0:2379 --initial-advertise-peer-urls http://$(IPADDRESS):2380 --listen-peer-urls http://0.0.0.0:2380 --initial-cluster-token etcd-cluster --initial-cluster etcd0=http://$(IPADDRESS):2380 --initial-cluster-state new --auto-compaction-retention=1 --advertise-client-urls=http://$(IPADDRESS):2379 --name=etcd0 --data-dir=/var/lib/etcd/data
 
 etcd-down:
@@ -70,3 +76,7 @@ kibana-up:
 kibana-down:
 	@echo "Stopping Kibana"
 	docker stop kibana
+
+ clean-up:
+	rm -rf /tmp/crawler-tags
+	rm -rf $(PWD)/data
