@@ -4,6 +4,7 @@ data/
 
 prometheus-config/prometheus.yml
 logstash/logstash.conf
+nginx/nginx.conf
 
 # Binaries for programs and plugins
 *.exe

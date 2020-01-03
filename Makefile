@@ -5,8 +5,8 @@ ACCESS_TOKEN_KEY="89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy"
 ACCESS_TOKEN_SECRET="htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j"
 DB_PORT="2379"
 
-start: app-run etcd-up prometheus-up grafana-up es-up logstash-up kibana-up
-stop: app-stop etcd-down prometheus-down grafana-down es-down logstash-down kibana-down clean-up
+start: app-run etcd-up prometheus-up grafana-up es-up logstash-up kibana-up nginx-up
+stop: app-stop etcd-down prometheus-down grafana-down es-down logstash-down kibana-down nginx-down clean-up
 
 grafana-up:
 	@echo Starting grafana...
@@ -80,3 +80,12 @@ kibana-down:
  clean-up:
 	rm -rf /tmp/crawler-tags
 	rm -rf $(PWD)/data
+
+nginx-up:
+	@echo "Starting nginx"
+	sed -e 's/@IPADDRESS@/$(IPADDRESS)/g' $(PWD)/nginx/nginx.config > $(PWD)/nginx/nginx.conf
+	docker run  -d -v $(PWD)/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v $(PWD)/nginx/mime.types:/etc/nginx/mime.types:ro -v $(PWD)/resources/:/resources/:ro -p 80:80  --name nginx --rm nginx:1.14.0
+
+nginx-down:
+	@echo "Stopping nginx"
+	docker stop nginx

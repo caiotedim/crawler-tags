@@ -14,9 +14,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.material.min.css" />
     <!--main js file start-->
-
-
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>
@@ -24,23 +21,25 @@
     <script type="text/javascript" src="assets/js/index.js"></script>
     <!--main js file end-->
   </head>
-  <body name="crawlerTags" ng-app='crawlerTags' ng-controller="UsersList" data-ng-init="crawlertagsApp()">
+  <body onload="getAPI();">
     <div class="row">
         <h5>5.a Quais são os 5 (cinco) usuários, da amostra coletada, que possuem mais seguidores? </h3>
     </div>
     <div class="row">
-        <table id="topfollowers" class="mdl-data-table" style="width:100%">
+        <table id="topfollowers" class="mdl-data-table" style="width:50%">
           <thead>
             <tr>
               <th>Usuário</th>
               <th>Quantidade</th>
             </tr>
           </thead>
-          <tbody ng-repeat="i in users">
-            <tr>
+          <tbody>
+            <tr id="topfollowers">
+            </tr>
+            <!--<tr>
               <td>{{i.user}}</td>
               <td>{{i.followers_count}}</td>
-            </tr>
+            </tr>-->
           </tbody>
         </table>
     </div>
