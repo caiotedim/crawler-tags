@@ -12,6 +12,7 @@ func TestSearchTweetByHashTag(t *testing.T) {
 	os.Setenv("CONSUMER_API_SECRET", "sKZwNIxDKj9kNVwO9K7oPncDqTExUWioY0yHxeVfY1j11xKfMc")
 	os.Setenv("ACCESS_TOKEN_KEY", "89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy")
 	os.Setenv("ACCESS_TOKEN_SECRET", "htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j")
+	os.Setenv("DB_HOST", "127.0.0.1")
 	c := config.NewConfig()
 	client := NewTwitterClient(c)
 	hashtag := "devops"
@@ -33,13 +34,17 @@ func TestSearchTweetByHashTag(t *testing.T) {
 
 }
 
-func TestLookupHashtags(t *testing.T) {
+func TestCountLang(t *testing.T) {
 	os.Setenv("CONSUMER_API_KEY", "U3tuMr9txi4jtqtaZFHaKC2RO")
 	os.Setenv("CONSUMER_API_SECRET", "sKZwNIxDKj9kNVwO9K7oPncDqTExUWioY0yHxeVfY1j11xKfMc")
 	os.Setenv("ACCESS_TOKEN_KEY", "89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy")
 	os.Setenv("ACCESS_TOKEN_SECRET", "htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j")
-	hashtag := ""
-	tweets := LookupHashtags(hashtag)
+	os.Setenv("DB_HOST", "127.0.0.1")
+	c := config.NewConfig()
+	tweets, err := LookupHashtags(c)
+	if err != nil {
+		t.Errorf("Error to Lookup on twitter: %v", err)
+	}
 
 	for k, i := range tweets {
 		if len(tweets[k].Tweets.Tweet) != 0 {
@@ -49,21 +54,63 @@ func TestLookupHashtags(t *testing.T) {
 		}
 	}
 
-	/*sorted := topFollowers(tweets)
-	for _, i := range sorted {
-		t.Errorf("user: %v followers: %d", i.User, i.Followers)
-	}
-
-	hourly := countByHour(tweets)
-	for _, i := range hourly {
-		t.Errorf("Hour: %d - Total: %d", i.Hour, i.Total)
-	}*/
-
 	hashtags := CountLang(tweets)
 	for _, i := range hashtags {
 		for _, v := range i.LangCount {
-			t.Errorf("Hashtag: %s - Lang: %s - Total: %d", i.Hashtag, v.Lang, v.Total)
+			t.Logf("Hashtag: %s - Lang: %s - Total: %d", i.Hashtag, v.Lang, v.Total)
 		}
 	}
 
+}
+
+func TestTopFollowers(t *testing.T) {
+	os.Setenv("CONSUMER_API_KEY", "U3tuMr9txi4jtqtaZFHaKC2RO")
+	os.Setenv("CONSUMER_API_SECRET", "sKZwNIxDKj9kNVwO9K7oPncDqTExUWioY0yHxeVfY1j11xKfMc")
+	os.Setenv("ACCESS_TOKEN_KEY", "89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy")
+	os.Setenv("ACCESS_TOKEN_SECRET", "htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j")
+	os.Setenv("DB_HOST", "127.0.0.1")
+	c := config.NewConfig()
+	tweets, err := LookupHashtags(c)
+	if err != nil {
+		t.Errorf("Error to Lookup on twitter: %v", err)
+	}
+
+	for k, i := range tweets {
+		if len(tweets[k].Tweets.Tweet) != 0 {
+			t.Logf("hashtag: %s tweets: %d", i.Hashtag, len(tweets[k].Tweets.Tweet))
+		} else {
+			t.Errorf("No tweets with this hashtag: %s", i.Hashtag)
+		}
+	}
+
+	sorted := TopFollowers(tweets)
+	for _, i := range sorted {
+		t.Logf("user: %v followers: %d", i.User, i.Followers)
+	}
+}
+
+func TestCountByHour(t *testing.T) {
+	os.Setenv("CONSUMER_API_KEY", "U3tuMr9txi4jtqtaZFHaKC2RO")
+	os.Setenv("CONSUMER_API_SECRET", "sKZwNIxDKj9kNVwO9K7oPncDqTExUWioY0yHxeVfY1j11xKfMc")
+	os.Setenv("ACCESS_TOKEN_KEY", "89549425-CYSCF9BEsM9BspXMt2sDrE3lNefBRSqMnp23t8psy")
+	os.Setenv("ACCESS_TOKEN_SECRET", "htBgTB7UfAyguykyN2smGCvIwLVwunEIq25v57376QI9j")
+	os.Setenv("DB_HOST", "127.0.0.1")
+	c := config.NewConfig()
+	tweets, err := LookupHashtags(c)
+	if err != nil {
+		t.Errorf("Error to Lookup on twitter: %v", err)
+	}
+
+	for k, i := range tweets {
+		if len(tweets[k].Tweets.Tweet) != 0 {
+			t.Logf("hashtag: %s tweets: %d", i.Hashtag, len(tweets[k].Tweets.Tweet))
+		} else {
+			t.Errorf("No tweets with this hashtag: %s", i.Hashtag)
+		}
+	}
+
+	hourly := CountByHour(tweets)
+	for _, i := range hourly {
+		t.Logf("Hour: %d - Total: %d", i.Hour, i.Total)
+	}
 }

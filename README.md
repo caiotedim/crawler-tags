@@ -25,6 +25,9 @@ Response:
 ```
 [{"followers_count":52380,"user":"usuário1"},{"followers_count":52380,"user":"usuário2"},{"followers_count":25044,"user":"usuário3"},{"followers_count":20393,"user":"usuário4"},{"followers_count":18355,"user":"usuário5"}]
 ```
+
+Print da tela
+![print](doc/prints/5a-print.png)
 ___
 
 ### Total de postagens agrupadas por hora do dia
@@ -36,6 +39,9 @@ Response:
 ```
 [{"Total":2,"Hour":2},{"Total":5,"Hour":16},{"Total":1,"Hour":19},{"Total":2,"Hour":18},{"Total":2,"Hour":4},{"Total":3,"Hour":9},{"Total":4,"Hour":20},{"Total":18,"Hour":12},{"Total":2,"Hour":11},{"Total":3,"Hour":8},{"Total":3,"Hour":7},{"Total":7,"Hour":15},{"Total":1,"Hour":3},{"Total":3,"Hour":10},{"Total":3,"Hour":14},{"Total":64,"Hour":22},{"Total":16,"Hour":21},{"Total":3,"Hour":17},{"Total":6,"Hour":13},{"Total":1,"Hour":23}]
 ```
+
+Print da tela
+![print](doc/prints/5b-print.png)
 ___
 
 ### Total de postagens para cada uma das hashtags por idioma
@@ -48,9 +54,12 @@ Response:
 [{"Hashtag":"openbanking","LangCount":[{"Lang":"en","Total":15}]},{"Hashtag":"apifirst","LangCount":[{"Lang":"en","Total":14},{"Lang":"und","Total":1}]},{"Hashtag":"devops","LangCount":[{"Lang":"en","Total":15}]},{"Hashtag":"cloudfirst","LangCount":[{"Lang":"en","Total":14},{"Lang":"und","Total":1}]},{"Hashtag":"microservices","LangCount":[{"Lang":"en","Total":15}]},{"Hashtag":"apigateway","LangCount":[{"Lang":"en","Total":9},{"Lang":"es","Total":3},{"Lang":"ja","Total":3}]},{"Hashtag":"oauth","LangCount":[{"Lang":"en","Total":1},{"Lang":"ja","Total":14}]},{"Hashtag":"swagger","LangCount":[{"Lang":"en","Total":14},{"Lang":"es","Total":1}]},{"Hashtag":"raml","LangCount":[{"Lang":"es","Total":1},{"Lang":"in","Total":1},{"Lang":"ja","Total":13}]},{"Hashtag":"openapis","LangCount":[{"Lang":"en","Total":14}]}]
 ```
 
+Print da tela
+![print](doc/prints/5c-print.png)
+
 ## Arquitetura
 
-![Arquitetura](/doc/arquitetura.jpg)
+![Arquitetura](doc/arquitetura.jpg)
 
 ## Gerando a Imagem
 

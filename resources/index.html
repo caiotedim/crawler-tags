@@ -11,38 +11,61 @@
     <meta name="author"  content="Caio Tedim Francisco"/>
     <meta name="MobileOptimized" content="320" />
     <!--srart theme style -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.material.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/materialize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/materialize.css" />
     <!--main js file start-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.material.min.js"></script>
+    <script type="text/javascript" src="assets/js/materialize.js"></script>
+    <script type="text/javascript" src="assets/js/materialize.min.js"></script>
     <script type="text/javascript" src="assets/js/index.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!--main js file end-->
   </head>
-  <body onload="getAPI();">
+  <body onload="getAPI()">
     <div class="row">
         <h5>5.a Quais são os 5 (cinco) usuários, da amostra coletada, que possuem mais seguidores? </h3>
     </div>
     <div class="row">
-        <table id="topfollowers" class="mdl-data-table" style="width:50%">
+        <table class="mdl-data-table" style="width:75%">
           <thead>
             <tr>
               <th>Usuário</th>
               <th>Quantidade</th>
             </tr>
           </thead>
-          <tbody>
-            <tr id="topfollowers">
-            </tr>
-            <!--<tr>
-              <td>{{i.user}}</td>
-              <td>{{i.followers_count}}</td>
-            </tr>-->
+          <tbody id="topfollowers">
           </tbody>
         </table>
     </div>
+    <div class="row">
+      <h5> 5.b Qual o total de postagens, agrupadas por hora do dia (independentemente da #hashtag) </h3>
+  </div>
+  <div class="row">
+      <table class="mdl-data-table" style="width:75%">
+        <thead>
+          <tr>
+            <th>Hora do dia</th>
+            <th>Quantidade de postagens</th>
+          </tr>
+        </thead>
+        <tbody id="postsummarized">
+        </tbody>
+      </table>
+  </div>
+  <div class="row">
+    <h5> 5.c Qual o total de postagens para cada uma das #tag por idioma/país do usuário que postou; </h3>
+</div>
+<div class="row">
+    <table class="mdl-data-table" style="width:75%">
+      <thead>
+        <tr>
+          <th>Hashtag</th>
+          <th>Idioma = Total</th>
+        </tr>
+      </thead>
+      <tbody id="totalpostslang">
+      </tbody>
+    </table>
+</div>
 
   </body>
 </html>
