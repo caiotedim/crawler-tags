@@ -1,0 +1,7 @@
+- import_playbook: playbooks/assets.yaml
+  tags:
+    - assets
+
+- import_playbook: playbooks/main.yaml
+  tags:
+    - main

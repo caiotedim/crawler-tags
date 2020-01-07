@@ -1,0 +1,19 @@
+[Unit]
+Description=elasticsearch
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm elasticsearch
+ExecStart=/usr/bin/docker run \
+          --name elasticsearch \
+          --net host \
+          --env "discovery.type=single-node" \
+          docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+ExecStop=/usr/bin/docker stop elasticsearch
+ExecStopPost=/usr/bin/docker rm elasticsearch
+
+[Install]
+WantedBy=multi-user.target

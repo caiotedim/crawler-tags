@@ -1,0 +1,16 @@
+- name: CRAWLER_TAGS | Bootstrap
+  hosts: crawler_tags
+  gather_facts: false
+  roles:
+    - { role: ansible, tags: ['ansible'] }
+
+- name: CRAWLER_TAGS | Configure Instance
+  hosts: crawler_tags
+  gather_facts: true
+  roles:
+    - { role: volumes,       tags: ['volumes']       }
+    - { role: etcd,          tags: ['etcd']          }
+    - { role: crawler-tags,  tags: ['crawler-tags']  }
+    - { role: prometheus,    tags: ['prometheus']    }
+    - { role: elasticsearch, tags: ['elasticsearch'] }
+    - { role: nginx,         tags: ['nginx']         }

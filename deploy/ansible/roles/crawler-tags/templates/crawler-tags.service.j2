@@ -1,0 +1,24 @@
+[Unit]
+Description=crawler-tags
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm crawler-tags
+ExecStart=/usr/bin/docker run \
+          --name crawler-tags \
+          --net host \
+          --volume /var/lib/volume/crawler-tags/:/tmp/crawler-tags/ \
+          --env CONSUMER_API_KEY="{{ CONSUMER_API_KEY }}" \
+          --env CONSUMER_API_SECRET="{{ CONSUMER_API_SECRET }}" \
+          --env ACCESS_TOKEN_KEY="{{ ACCESS_TOKEN_KEY }}" \
+          --env ACCESS_TOKEN_SECRET="{{ ACCESS_TOKEN_SECRET }}" \
+          --env DB_HOST="{{ private_ip_address }}" \
+          crawler-tags:latest
+ExecStop=/usr/bin/docker stop crawler-tags
+ExecStopPost=/usr/bin/docker rm crawler-tags
+
+[Install]
+WantedBy=multi-user.target

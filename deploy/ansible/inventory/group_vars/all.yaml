@@ -1,0 +1,9 @@
+pypy_version: "5.8"
+
+crawler_tags_version: "1.0.0"
+
+volume:
+  size: 50
+  fstype: ext4
+  device: /dev/xvdf
+  mount_path: /var/lib/volume

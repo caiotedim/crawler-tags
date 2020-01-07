@@ -1,0 +1,29 @@
+- name: CRAWLER-TAGS | Load confidential data
+  include_vars: "{{ lookup('env','PWD') }}/private/main.yaml"
+
+- name: CRAWLER-TAGS | Create directory
+  file:
+    path: "{{ item }}"
+    state: "directory"
+  with_items:
+    - /var/lib/volume/crawler-tags
+
+- name: CRAWLER-TAGS | Deploy crawler-tags systemd units
+  template:
+    src: crawler-tags.service.j2
+    dest: /etc/systemd/system/crawler-tags.service
+
+- name: CRAWLER-TAGS | Flush Handlers
+  meta: flush_handlers
+
+- name: CRAWLER-TAGS | Enable crawler-tags
+  service:
+    name: crawler-tags
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: CRAWLER-TAGS | Wait for service become running
+  wait_for:
+    port: 8080
+    host: "127.0.0.1"

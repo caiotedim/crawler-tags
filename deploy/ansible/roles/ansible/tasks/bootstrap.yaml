@@ -1,0 +1,33 @@
+# Bootstrap Ansible
+# Configure a Pypy virtual environment for Ansible.
+# The raw commands below are necessary because Ansible modules are not yet available due to the lack of a Python interpreter.
+
+# This task bootstraps Pypy and Ansible directories, removing them in case of a rebootstrap.
+- name: Ansible | Bootstrap Pypy and Ansible Directories
+  raw: /usr/bin/rm -rf /opt/pypy /opt/ansible && /usr/bin/mkdir -p /opt/pypy /opt/ansible
+
+# This task delegates a raw command to localhost that sends Pypy compressed file directly to tar for uncompression using ssh.
+# It may seem a bit odd at first, but it's the simplest form of deploying Pypy without Ansible modules in a single command.
+- name: Ansible | Upload and Unpack Pypy
+  delegate_to: localhost
+  raw: >
+    /bin/cat "{{ lookup('env','PWD') }}/assets/pypy/{{ pypy_version }}/pypy-{{ pypy_version }}-linux_x86_64-portable.tar.bz2" |
+    /usr/bin/ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /Users/cfrancisco/.ssh/id_rsa
+    "core@{{ ansible_host }}" /usr/bin/sudo /usr/bin/tar -xj --strip-components 1 -C /opt/pypy/
+
+- name: Ansible | Generate Ansible Virtual Environment
+  raw: /opt/pypy/bin/pypy /opt/pypy/bin/virtualenv-pypy --system-site-packages /opt/ansible
+
+- name: Ansible | Create Ansible Facts Directory
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+    recurse: true
+
+# Creating a Pypy fact will ensure that the main task can verify if bootstraping is required.
+# In case the main task cannot find this fact, it will automatically trigger a bootstrap by including this file.
+# Without this fact, it would be rather difficult for the main task to verify if bootstrap is necessary.
+- name: Ansible | Create Pypy Fact
+  template:
+    src: pypy.fact.j2
+    dest: /etc/ansible/facts.d/pypy.fact

@@ -1,0 +1,24 @@
+plugin: aws_ec2
+cache: yes
+cache_plugin: jsonfile
+cache_timeout: 10
+cache_connection: /tmp/aws_inventory
+cache_prefix: aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:project: ["crawler-tags"]
+  instance-state-name: [ "shutting-down", "stopping", "stopped", "running","pending" ]
+hostnames:
+  - tag:Name
+keyed_groups:
+  - key: tags.project
+    separator: ''
+  - key: placement.region
+    prefix: aws_region
+  - key: tags.base
+    separator: ''
+compose:
+  ansible_host: public_ip_address
+  region: placement.region
+  instance_name: tags.Name

@@ -21,3 +21,8 @@ nginx/nginx.conf
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+.terraform*
+terraform.*
+.ansible.vault
+ansible/assets

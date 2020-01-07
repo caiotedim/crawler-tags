@@ -1,0 +1,15 @@
+- name: Volume | Create Filesystem On Instances
+  filesystem:
+    fstype: "{{ volume.fstype }}"
+    dev: "{{ volume.device }}"
+    resizefs: true
+  when: volume is defined
+
+- name: Volume | Mount Filesystem On Instances
+  mount:
+    name: "{{ volume.mount_path }}"
+    state: mounted
+    src: "{{ volume.device }}"
+    fstype: "{{ volume.fstype }}"
+    opts: rw
+  when: volume is defined

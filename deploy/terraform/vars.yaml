@@ -1,0 +1,27 @@
+tags:
+  project: crawler-tags
+  owner: "caiotedim@gmail.com"
+
+ssh_keys:
+  sre:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbJZCj6F2SMcYmCfEN7z5A/Vh27kfC36lJ4z4EiEBWtD/Q1TPHDkNURSDpg5osluO91138N1oSxN5bRvXNXhfacQKvlHi0KZIWefYBvJ6Vh+dtLuXPuJCmYwCnF0tGayNlKPcXTG4TuW6YM8ifGg0HY7f/40joIunvKd4jakW/OwOfq9PeM4sTa0BiMSnwNVA9fsY72yelMcJG9tpOJMN9ms314Ogry6SKazW53GyyNxNKD8V/b+dzVraLUJkODO3HCFemow+06IBh4C+Bfg5bf2XaHtFN9pcqES1kWSnBrEyquRaIJHJnLjBYQK1hzP8difY31y+lk1t81nj0MvfpcXLjGhHBi43zI0upEBQbiLEL6NgOr7GaH0SLVq56oB6rJTCDBqlMpCfCjJwKtMTFdTDGKEVy0dq+5sNReO35DQDc7bgWjJ6r6LW7/qgibSHFOafseLPvLLdKohg2LrzFWOjjFtz5tStLlTa5Q4i7Jz2+2TNe5sTV0ypSA0O5Jg7DYJ67ZhcWnigV/4+vFEzIIDykL9OQuj2C3HXaYzEcbSCx32w34DmxyZb+lVvy4MHg7ILcPVLsa29iMjX2vk29sXLqZ1WfwL5gTYpusfMoKHAE1Rh9Ue/OUMXGefW9yilV++oixQnfw2sc+ajzQLnEigCxgsOX+/3VOK1gPyrDGQ== caiotedim@gmail.com
+
+region: us-east-1
+zone: us-east-1a
+vpc:
+  main_block: 10.0.0.0/24
+  vpc_blocks:
+  - 10.0.0.0/24
+  subnet:
+  - 10.0.0.0/25
+
+instance:
+  count: 1
+  type: t2.micro
+  ami: "ami-0a953cad0391f0305"
+  volume:
+    type: gp2
+    size: 50
+    fstype: ext4
+    device: /dev/xvdf
+    mount_path: /var/lib/volume

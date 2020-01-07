@@ -1,0 +1,5 @@
+- name: Restart crawler-tags
+  service:
+    name: crawler-tags
+    state: restarted
+    daemon_reload: yes

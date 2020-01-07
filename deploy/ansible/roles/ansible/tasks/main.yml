@@ -1,0 +1,35 @@
+# Ansible Role
+# Bootstraps a python environment for Ansible execution.
+
+# If pypy local fact is defined, it means that this instance has already been bootstraped.
+# In this case, bootstrap is not necessary, and if a pypy upgrade is needed, rebootstrap will occur if this fact is absent.
+# This verification uses the raw module because in the first execution, Ansible modules are unavailable without a Python interpreter.
+- name: Ansible | Check if Bootstrap is Needed
+  register: need_bootstrap
+  raw: stat /etc/ansible/facts.d/pypy.fact
+  ignore_errors: true
+  no_log: true
+
+# Bootstrap the Ansible environment if pypy fact is absent.
+- name: Ansible | Bootstrap Environment
+  include_tasks: bootstrap.yaml
+  when: need_bootstrap is failed
+
+# Reload the local facts to discover pypy local fact.
+- name: Ansible | Load Local Facts
+  setup: filter=ansible_local
+
+# Rebootstrap the Ansible environment if pypy version is newer.
+- name: Ansible | Rebootstrap Environment If Necessary
+  include_tasks: bootstrap.yaml
+  when: ansible_local['pypy']['version'] != pypy_version
+
+# Install the following modules necessary for other roles.
+#   - docker ( for docker container management )
+#- name: Ansible | Install Modules
+#  pip:
+#    name: "{{ item.name }}"
+#    version: "{{ item.version }}"
+#    virtualenv: /opt/ansible
+#  with_items:
+#    - { name: docker, version: 3.4.1}

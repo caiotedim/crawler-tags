@@ -63,6 +63,9 @@ Print da tela
 
 ## Gerando a Imagem
 
+
+### Subindo local
+
 Requisitos mínimos:
 ```
 - Linux ou Mac
@@ -92,8 +95,6 @@ $ make build
 $ docker images |grep crawler tags
 ```
 
-___
-
 ## Executar a aplicação
 
 Antes de subir a aplicação é necessário configurar 5 variáveis, são elas:
@@ -121,6 +122,56 @@ Para parar a aplicação execute
 $ make stop
 ```
 
+### Fazendo o deploy na AWS
+Requisitos mínimos:
+```
+- Linux ou Mac
+- Acesso à internet
+- git instalado
+- docker instalado e configurado
+- executar com o usuário configurado para o docker ou root
+- ansible >= 2.9
+- terraform >= 0.12
+- chaves da aws configuradas
+```
+
+- Clonar o projeto
+```
+$ git clone git@github.com:caiotedim/crawler-tags.git
+```
+
+- dentro do diretório do terraform
+```
+$ cd crawler-tags/deploy/terraform
+```
+
+- Iniciar o terraform
+```
+$ terraform init
+```
+
+- Fazer o plan do terraform (opcional)
+```
+$ terraform plan
+```
+
+- Fazer o apply do terraform
+```
+$ terraform apply
+```
+
+- O terraform irá subir uma instância em uma vpc 10.0.0.0/24
+
+- Antes de executar o ansible, é necessário criar um arquivo na raiz do ansible com o nome de `.ansible.vault` com o conteúdo
+```
+123456
+```
+
+- Execute o ansible
+```
+$ cd ../ansible
+$ ansible-playbook -i inventory/aws_ec2.yaml main.yaml
+```
 ___
 ## Segue alguns prints dos logs e o dashboard
 

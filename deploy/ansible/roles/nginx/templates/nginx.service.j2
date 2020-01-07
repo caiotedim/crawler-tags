@@ -1,0 +1,19 @@
+[Unit]
+Description=nginx
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm nginx
+ExecStart=/usr/bin/docker run \
+          --name nginx \
+          --net host \
+          --volume /etc/nginx/:/etc/nginx/ \
+          nginx:1.14.0-alpine
+ExecStop=/usr/bin/docker stop nginx
+ExecStopPost=/usr/bin/docker rm nginx
+
+[Install]
+WantedBy=multi-user.target

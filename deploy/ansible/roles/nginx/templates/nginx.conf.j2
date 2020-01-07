@@ -1,0 +1,43 @@
+worker_processes auto;
+
+events {
+  worker_connections 1024;
+  use epoll;
+  multi_accept on;
+}
+
+http {
+  tcp_nodelay on;
+
+  # this is necessary for us to be able to disable request buffering in all cases
+  proxy_http_version 1.1;
+
+  upstream api {
+    server {{ private_ip_address }}:8080;
+  }
+  include /etc/nginx/mime.types;
+
+  log_format timed_combined '$remote_addr - '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" '
+    '$request_time $upstream_response_time $pipe';
+
+  access_log /dev/stdout timed_combined;
+
+  server {
+    listen 80;
+    root /resources;
+
+    add_header Access-Control-Allow-Origin "*";
+    add_header Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT";
+    add_header Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization";
+
+    location /api {
+      proxy_pass http://api;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+  }
+}

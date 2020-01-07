@@ -1,0 +1,28 @@
+[Unit]
+Description=etcd3
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm etcd3
+ExecStart=/usr/bin/docker run \
+          --name etcd3 \
+          --net host \
+          --volume /var/lib/volume/etcd:/var/lib/etcd/data \
+          quay.io/coreos/etcd:v3.3.10 \
+          etcd --listen-client-urls http://0.0.0.0:2379 \
+          --initial-advertise-peer-urls http://{{ private_ip_address }}:2380 \
+          --listen-peer-urls http://0.0.0.0:2380 \
+          --initial-cluster-token etcd-cluster \
+          --initial-cluster etcd0=http://{{ private_ip_address }}:2380 \
+          --initial-cluster-state new \
+          --auto-compaction-retention=1 \
+          --advertise-client-urls=http://{{ private_ip_address }}:2379 \
+          --name=etcd0 --data-dir=/var/lib/etcd/data
+ExecStop=/usr/bin/docker stop etcd3
+ExecStopPost=/usr/bin/docker rm etcd3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+- name: Assets | Prepare Assets for Deployment
+  hosts: localhost
+  tasks:
+  - name: Assets | Create Pypy Directory
+    file:
+      path: "{{ lookup('env','PWD') }}/assets/pypy/{{ pypy_version }}"
+      state: directory
+      recurse: true
+
+  - name: Assets | Download Pypy
+    get_url:
+      url: "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-{{ pypy_version }}-linux_x86_64-portable.tar.bz2"
+      dest: "{{ lookup('env','PWD') }}/assets/pypy/{{ pypy_version }}/pypy-{{ pypy_version }}-linux_x86_64-portable.tar.bz2"
+      force: no
