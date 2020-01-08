@@ -10,8 +10,8 @@ ExecStartPre=-/usr/bin/docker rm grafana
 ExecStart=/usr/bin/docker run \
           --name grafana \
           --net host \
-          --env "GF_SERVER_ROOT_URL=http://{{ private_ip_address }}:3000" \
-          --env "GF_SECURITY_ADMIN_PASSWORD=secret" \
+          --env GF_SERVER_ROOT_URL=http://{{ private_ip_address }}:3000 \
+          --env GF_SECURITY_ADMIN_PASSWORD=secret \
           grafana/grafana
 ExecStop=/usr/bin/docker stop grafana
 ExecStopPost=/usr/bin/docker rm grafana

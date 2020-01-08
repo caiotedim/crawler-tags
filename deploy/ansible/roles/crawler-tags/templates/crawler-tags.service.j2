@@ -16,7 +16,7 @@ ExecStart=/usr/bin/docker run \
           --env ACCESS_TOKEN_KEY="{{ ACCESS_TOKEN_KEY }}" \
           --env ACCESS_TOKEN_SECRET="{{ ACCESS_TOKEN_SECRET }}" \
           --env DB_HOST="{{ private_ip_address }}" \
-          crawler-tags:latest
+          caiotedim/crawler-tags:latest
 ExecStop=/usr/bin/docker stop crawler-tags
 ExecStopPost=/usr/bin/docker rm crawler-tags
 

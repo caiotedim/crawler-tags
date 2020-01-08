@@ -135,6 +135,11 @@ Requisitos mínimos:
 - chaves da aws configuradas
 ```
 
+- Necessário modificar a ssh pública para o acesso à instância
+```
+$ deploy/teraform/vars.yaml
+```
+
 - Clonar o projeto
 ```
 $ git clone git@github.com:caiotedim/crawler-tags.git

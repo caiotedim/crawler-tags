@@ -17,7 +17,7 @@ vpc:
 
 instance:
   count: 1
-  type: t2.micro
+  type: m5.xlarge
   ami: "ami-0a953cad0391f0305"
   volume:
     type: gp2

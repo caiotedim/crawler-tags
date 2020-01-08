@@ -1,0 +1,21 @@
+[Unit]
+Description=logstash
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm logstash
+ExecStart=/usr/bin/docker run \
+          --name logstash \
+          --net host \
+          --volume /etc/logstash/:/usr/share/logstash/config/ \
+          --volume /etc/logstash/:/usr/share/logstash/pipeline/ \
+          --volume /var/lib/volume/crawler-tags:/tmp/crawler-tags \
+          docker.elastic.co/logstash/logstash:6.4.2
+ExecStop=/usr/bin/docker stop logstash
+ExecStopPost=/usr/bin/docker rm logstash
+
+[Install]
+WantedBy=multi-user.target

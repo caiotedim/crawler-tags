@@ -11,6 +11,9 @@
     - { role: volumes,       tags: ['volumes']       }
     - { role: etcd,          tags: ['etcd']          }
     - { role: crawler-tags,  tags: ['crawler-tags']  }
+    - { role: nginx,         tags: ['nginx']         }
     - { role: prometheus,    tags: ['prometheus']    }
     - { role: elasticsearch, tags: ['elasticsearch'] }
-    - { role: nginx,         tags: ['nginx']         }
+    - { role: grafana,       tags: ['grafana']       }
+    - { role: logstash,      tags: ['logstash']      }
+    - { role: kibana,        tags: ['kibana']        }

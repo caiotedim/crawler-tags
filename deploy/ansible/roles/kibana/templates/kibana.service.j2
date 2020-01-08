@@ -1,0 +1,19 @@
+[Unit]
+Description=kibana
+After=docker.service
+Wants=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker rm kibana
+ExecStart=/usr/bin/docker run \
+          --name kibana \
+          --net host \
+          --env ELASTICSEARCH_HOSTS=http://{{ private_ip_address }}:9200 \
+          docker.elastic.co/kibana/kibana:7.5.1
+ExecStop=/usr/bin/docker stop kibana
+ExecStopPost=/usr/bin/docker rm kibana
+
+[Install]
+WantedBy=multi-user.target

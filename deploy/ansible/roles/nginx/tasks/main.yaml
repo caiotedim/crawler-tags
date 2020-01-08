@@ -10,6 +10,12 @@
   with_items:
     - /etc/nginx
     - /etc/nginx/conf.d
+    - /var/lib/volume/nginx/www
+
+- name: NGINX | Create directory
+  copy:
+    src: "../../../../resources"
+    dest: "/var/lib/volume/nginx"
 
 - name: NGINX | Deploy Nginx conf
   template:

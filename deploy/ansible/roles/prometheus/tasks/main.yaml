@@ -19,7 +19,6 @@
     dest: /etc/prometheus/{{ item }}
   with_items:
     - prometheus.yml
-  notify: Restart prometheus
 
 - name: PROMETHEUS | Flush Handlers
   meta: flush_handlers
